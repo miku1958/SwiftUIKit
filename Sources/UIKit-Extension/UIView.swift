@@ -80,6 +80,10 @@ extension UIView {
 		init(view: View?) {
 			self.view = view
 		}
+		var _textStorage: NSTextStorage?
+		var textStorage: NSTextStorage? {
+			_textStorage
+		}
 		var _textContainer: NSTextContainer?
 		var textContainer: NSTextContainer? {
 			_textContainer
@@ -130,8 +134,11 @@ extension UIView._Delegate {
 
 		var range = NSRange()
 		let attribute = layoutManager.textStorage?.attributes(at: characterTapped, effectiveRange: &range)
-
-		if texts.contains(range) {
+		
+		//FIX:    某些时候因为字体问题导致被切分, 比如[开通会员,]里[开通会员]用的字体是PingFangSC, [,]用的字体是SFUI然后被分开
+		if texts.contains(where: {
+			$0.contains(range.lowerBound) && $0.contains(range.upperBound-1)
+		}) {
 			return attribute?[key] as? T
 		}
 		return nil
@@ -219,16 +226,26 @@ extension UITextField.SwiftUIKit {
 			return _textContainer
 		}
 
+		override var textStorage: NSTextStorage? {
+			guard _textStorage == nil else { return _textStorage }
+			_textStorage = NSStringDrawingTextStorage()
+			return _textStorage
+		}
 		override var layoutManager: NSLayoutManager? {
-			guard _layoutManager == nil else { return _layoutManager }
+			guard _layoutManager == nil else {
+				if let text = view?.attributedText {
+					textStorage?.setAttributedString(text)
+				}
+				return _layoutManager
+			}
 			let layoutManager = NSLayoutManager()
 			layoutManager.addTextContainer(textContainer!)
 
-			let textStorage = NSStringDrawingTextStorage()
-			textStorage.addLayoutManager(layoutManager)
+			textStorage?.addLayoutManager(layoutManager)
 			if let text = view?.attributedText {
-				textStorage.append(text)
+				textStorage?.setAttributedString(text)
 			}
+			
 			_layoutManager = layoutManager
 			return layoutManager
 		}
@@ -264,17 +281,26 @@ extension UILabel.SwiftUIKit {
 			_textContainer = textContainer
 			return _textContainer
 		}
-
+		override var textStorage: NSTextStorage? {
+			guard _textStorage == nil else { return _textStorage }
+			_textStorage = NSStringDrawingTextStorage()
+			return _textStorage
+		}
 		override var layoutManager: NSLayoutManager? {
-			guard _layoutManager == nil else { return _layoutManager }
+			guard _layoutManager == nil else {
+				if let text = view?.attributedText {
+					textStorage?.setAttributedString(text)
+				}
+				return _layoutManager
+			}
 			let layoutManager = NSLayoutManager()
 			layoutManager.addTextContainer(textContainer!)
 
-			let textStorage = NSStringDrawingTextStorage()
-			textStorage.addLayoutManager(layoutManager)
+			textStorage?.addLayoutManager(layoutManager)
 			if let text = view?.attributedText {
-				textStorage.append(text)
+				textStorage?.setAttributedString(text)
 			}
+			
 			_layoutManager = layoutManager
 			return layoutManager
 		}

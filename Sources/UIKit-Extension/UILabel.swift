@@ -9,13 +9,13 @@
 import UIKit
 extension UILabel {
 	public struct SwiftUIKit {
-		weak var view: UILabel?
+		fileprivate weak var view: UILabel?
 		
 		fileprivate lazy var delegate = Delegate(view: view)
 		
 		fileprivate var tapGestrues: [TapGesture] = []
 		fileprivate var longPressGestrues: [LongPressGesture] = []
-
+//		public var defaultStyle
 		public var text: Text? {
 			didSet {
 				view?.attributedText = text?.text
