@@ -218,8 +218,20 @@ extension Text {
 		addAttribute(.foregroundColor, value: color?.uiColor)
 	}
 	
+	/// Sets the color of this text.
+	///
+	/// - Parameter color: The color to use when displaying this text.
+	/// - Returns: Text that uses the color value you supply.
+	public func foregroundColor(_ color: UIColor?) -> Text {
+		addAttribute(.foregroundColor, value: color)
+	}
+	
 	public func background(_ background: Color) -> Text {
 		addAttribute(.backgroundColor, value: background.uiColor)
+	}
+	
+	public func background(_ background: UIColor) -> Text {
+		addAttribute(.backgroundColor, value: background)
 	}
 	
 	/// Sets the font to use when displaying this text.
@@ -228,6 +240,14 @@ extension Text {
 	/// - Returns: Text that uses the font you specify.
 	public func font(_ font: Font?) -> Text {
 		addAttribute(.font, value: font?.uiFont)
+	}
+	
+	/// Sets the font to use when displaying this text.
+	///
+	/// - Parameter font: The font to use when displaying this text.
+	/// - Returns: Text that uses the font you specify.
+	public func font(_ font: UIFont?) -> Text {
+		addAttribute(.font, value: font)
 	}
 	
 	func handleFont(_ handler: (Font) -> Font) -> Text {
