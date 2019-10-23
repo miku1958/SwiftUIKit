@@ -52,6 +52,29 @@ extension UIView {
 }
 
 extension UIView {
+	private class TapGestureRecognizer: UITapGestureRecognizer {
+		var action: () -> Void
+		init(action: @escaping () -> Void) {
+			self.action = action
+			super.init(target: nil, action: nil)
+			addTarget(self, action: #selector(performAction))
+		}
+		@objc private func performAction() {
+			action()
+		}
+	}
+	
+    /// Returns a version of `self` that will invoke `action` after
+    /// recognizing a tap gesture.
+	public func onTapGesture(count: Int = 1, perform action: @escaping () -> Void) -> Self {
+		let tap = TapGestureRecognizer(action: action)
+		tap.numberOfTouchesRequired = count
+		addGestureRecognizer(tap)
+		return self
+	}
+}
+
+extension UIView {
 	class _Delegate<View>: NSObject, UIGestureRecognizerDelegate where View: UIView {
 		weak var view: View?
 		init(view: View?) {
