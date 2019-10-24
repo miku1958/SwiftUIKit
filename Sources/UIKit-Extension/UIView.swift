@@ -66,10 +66,12 @@ extension UIView {
 	
     /// Returns a version of `self` that will invoke `action` after
     /// recognizing a tap gesture.
+	@discardableResult
 	public func onTapGesture(count: Int = 1, perform action: @escaping () -> Void) -> Self {
 		let tap = TapGestureRecognizer(action: action)
 		tap.numberOfTouchesRequired = count
 		addGestureRecognizer(tap)
+		isUserInteractionEnabled = true
 		return self
 	}
 }
