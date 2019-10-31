@@ -58,99 +58,18 @@ public struct Text {
 		
 		return _text
 	}
-	static func chekPlaceholderIn(string: inout String, to attStr: NSMutableAttributedString) {
-		var finish = false
-		while !finish {
-			typealias Interceptor = String.StringInterpolation.Interceptor
-			func appendImage(range: Range<String.Index>) {
-				let prefix = string[string.startIndex ..< range.lowerBound]
-				attStr.append(NSAttributedString(string: String(prefix)))
-				
-				/*handle image*/
-				let image = Interceptor.default.cachingImage.removeFirst()
-				
-				let atr = NSMutableAttributedString(string: "\u{FFFC}")
 
-				let attach = NSTextAttachment()
-				attach.image = image.image
-				
-				let imgWidth = image.image.size.width
-				let imgHeight = image.image.size.height
-				var size: CGSize
-				switch (image.width, image.height) {
-				case (nil, nil):
-					size = image.image.size
-				case let (.some(width), .some(height)):
-					size = CGSize(width: width, height: height)
-				case let (.some(width), nil):
-					size = CGSize(width: width, height: width / imgWidth * imgHeight)
-				case let (nil, .some(height)):
-					size = CGSize(width: height / imgHeight * imgWidth, height: height)
-				}
-
-				let bounds = CGRect(origin: CGPoint(x: 0, y: image.offset), size: size)
-				
-				attach.bounds = bounds
-				atr.setAttributes([.attachment: attach], range: NSRange(location: 0, length: atr.length))
-				attStr.append(atr)
-				/*handle image end*/
-				
-				string = String(string[range.upperBound ..< string.endIndex])
-			}
-			func appendAttributeString(range: Range<String.Index>) {
-				let prefix = string[string.startIndex ..< range.lowerBound]
-				attStr.append(NSAttributedString(string: String(prefix)))
-				
-				/*handle attributedString*/
-				let attributed = Interceptor.default.cachingAttributedString.removeFirst()
-				attStr.append(attributed)
-				/*handle attributedString end*/
-				
-				string = String(string[range.upperBound ..< string.endIndex])
-			}
-			let range = [Interceptor.imagePlaceholder, Interceptor.attributedPlaceholder]
-				.compactMap { string.range(of: $0) }
-				.sorted { $0.lowerBound < $1.lowerBound }
-				.first
-			if let range = range {
-				switch String(string[range]) {
-				case Interceptor.imagePlaceholder:
-					appendImage(range: range)
-				case Interceptor.attributedPlaceholder:
-					appendAttributeString(range: range)
-				default: break
-				}
-				continue
-			}
-			
-			finish = true
-		}
-	}
-	static func createAttributed(string: String) -> NSMutableAttributedString {
-		let attStr = NSMutableAttributedString()
-		var string = string
-		chekPlaceholderIn(string: &string, to: attStr)
-		if !string.isEmpty {
-			attStr.append(NSAttributedString(string: string))
-		}
-		let para = NSMutableParagraphStyle()
-		para.lineSpacing = 2
-		attStr.addAttributes([
-			.paragraphStyle: para
-		], range: NSRange(location: 0, length: attStr.length))
-		return attStr
-	}
 	/// Creates an instance that displays `content` verbatim. 原样逐字返回字符串
-	public init(verbatim content: String) {
-		_text = Self.createAttributed(string: content)
+	public init(verbatim content: StringInterpolation) {
+		_text = content.attritubedString()
 	}
 	
 	/// Creates an instance that displays `content` verbatim. 先检查本地化, 如果没有再原样逐字返回字符串
-	public init<S>(_ content: S) where S : StringProtocol {
-		let str = String(content)
-		_text = Self.createAttributed(string: Bundle.main.localizedString(forKey: str, value: str, table: nil))
+	public init(_ content: StringInterpolation) {
+		_text = content.attritubedString(withlocalized: Bundle.main, tableName: nil, useDefaultValue: true)
 	}
 	
+	public typealias LocalizedStringKey = StringInterpolation
 	/// Creates text that displays localized content identified by a key.
 	///
 	/// - Parameters:
@@ -161,7 +80,7 @@ public struct Text {
 	///       main `Bundle`.
 	///     - comment: Contextual information about this key-value pair.
 	public init(_ key: LocalizedStringKey, tableName: String? = nil, bundle: Bundle? = nil, comment: StaticString? = nil) {
-		_text = Self.createAttributed(string: (bundle ?? Bundle.main).localizedString(forKey: key.value, value: nil, table: tableName))
+		_text = key.attritubedString(withlocalized: bundle, tableName: tableName, useDefaultValue: false)
 	}
 }
 

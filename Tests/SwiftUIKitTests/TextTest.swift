@@ -24,10 +24,10 @@ class TextTest: XCTestCase {
 		
 		XCTAssert(text.text.attributes(at: 0, effectiveRange: nil)[.font] as? UIFont == Text.defaultFont.uiFont)
 		
-		text = text.foregroundColor(.red)
+		text = text.foregroundColor(Color.red)
 		XCTAssert(text.text.attributes(at: 0, effectiveRange: nil)[.foregroundColor] as? UIColor == .red)
 		
-		text = text.background(.black)
+		text = text.background(Color.black)
 		XCTAssert(text.text.attributes(at: 0, effectiveRange: nil)[.backgroundColor] as? UIColor == .black)
 			
 		_={
@@ -154,7 +154,7 @@ class TextTest: XCTestCase {
 		_={
 			let width = CGFloat.random(in: 0..<100)
 			let offset = CGFloat.random(in: 0..<100)
-			let att = Text("\(Text: image, width: width, offset: offset)").text.attributes(at: 0, effectiveRange: nil)
+			let att = Text("\(image, width: width, offset: offset)").text.attributes(at: 0, effectiveRange: nil)
 			guard
 				let attachment = att[.attachment] as? NSTextAttachment
 			else {
@@ -169,7 +169,7 @@ class TextTest: XCTestCase {
 		
 		_={
 			let height = CGFloat.random(in: 0..<100)
-			let att = Text("\(Text: image, height: height)").text.attributes(at: 0, effectiveRange: nil)
+			let att = Text("\(image, height: height)").text.attributes(at: 0, effectiveRange: nil)
 			guard
 				let attachment = att[.attachment] as? NSTextAttachment
 			else {
@@ -184,7 +184,7 @@ class TextTest: XCTestCase {
 		_={
 			let height = CGFloat.random(in: 0..<100)
 			let width = CGFloat.random(in: 0..<100)
-			let att = Text("\(Text: image, width: width, height: height)").text.attributes(at: 0, effectiveRange: nil)
+			let att = Text("\(image, width: width, height: height)").text.attributes(at: 0, effectiveRange: nil)
 			guard
 				let attachment = att[.attachment] as? NSTextAttachment
 			else {
@@ -195,7 +195,7 @@ class TextTest: XCTestCase {
 			XCTAssert(attachment.bounds.size == size)
 		}()
 		_={
-			let att = Text("\(Text: image)").text.attributes(at: 0, effectiveRange: nil)
+			let att = Text("\(image)").text.attributes(at: 0, effectiveRange: nil)
 			guard
 				let attachment = att[.attachment] as? NSTextAttachment
 			else {
@@ -213,7 +213,7 @@ class TextTest: XCTestCase {
 		para.lineSpacing = 2
 		testAttStr.addAttributes([.paragraphStyle: para, .font: Text.defaultFont.uiFont], range: NSRange(location: 0, length: testAttStr.length))
 		
-		XCTAssert(Text("\(Text: attributeStr)").text == testAttStr)
+		XCTAssert(Text("\(attributeStr)").text == testAttStr)
 	}
 
 }
