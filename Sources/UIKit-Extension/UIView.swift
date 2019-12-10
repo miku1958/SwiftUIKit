@@ -230,7 +230,7 @@ extension UITextField.SwiftUIKit {
 
 		override var textStorage: NSTextStorage? {
 			guard _textStorage == nil else { return _textStorage }
-			_textStorage = NSStringDrawingTextStorage()
+			_textStorage = UILabelTextStorage()
 			return _textStorage
 		}
 		override var layoutManager: NSLayoutManager? {
@@ -285,7 +285,7 @@ extension UILabel.SwiftUIKit {
 		}
 		override var textStorage: NSTextStorage? {
 			guard _textStorage == nil else { return _textStorage }
-			_textStorage = NSStringDrawingTextStorage()
+			_textStorage = UILabelTextStorage()
 			return _textStorage
 		}
 		override var layoutManager: NSLayoutManager? {

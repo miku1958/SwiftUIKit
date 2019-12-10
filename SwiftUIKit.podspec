@@ -1,7 +1,7 @@
 Pod::Spec.new do |spec|
 
   spec.name         = "SwiftUIKit"
-  spec.version      = "1.0.0"
+  spec.version      = "1.1.1"
   spec.summary      = "A SwfitUI style UIKit"
 
   spec.description  = <<-DESC
@@ -18,7 +18,7 @@ Pod::Spec.new do |spec|
 
   spec.source       = { :git => "https://github.com/miku1958/SwiftUIKit.git", :tag => "#{spec.version}" }
 
-  spec.source_files  = "Sources/**/*.{swift}", "SwiftUIKit/SwiftUIKit.h"
+  spec.source_files  = "Sources/**/*.{swift}"
 
   spec.requires_arc = true
 
