@@ -284,7 +284,7 @@ extension Text {
 	/// - Parameter shadowBlurRadius: blur radius of the shadow in default user space units
 	/// - Parameter shadowColor: color used for the shadow (default is black with an alpha value of 1/3)
 	/// - Returns: Text that's above or below its shadow.
-	public func shadow(_ shadowOffset: CGSize, shadowBlurRadius: CGFloat, shadowColor: Color? = nil) -> Text {
+	func shadow(_ shadowOffset: CGSize, shadowBlurRadius: CGFloat, shadowColor: Color? = nil) -> Text {
 		let shadow = NSShadow()
 		shadow.shadowOffset = shadowOffset
 		shadow.shadowBlurRadius = shadowBlurRadius
@@ -293,22 +293,39 @@ extension Text {
 		}
 		return addAttribute(.shadow, value: shadow)
 	}
-	
-	/// Sets the shadow for this text.
-	///
-	/// - Parameter shadowOffset: offset in user space of the shadow from the original drawing
-	/// - Parameter shadowBlurRadius: blur radius of the shadow in default user space units
-	/// - Parameter shadowColor: color used for the shadow (default is black with an alpha value of 1/3)
-	/// - Returns: Text that's above or below its shadow.
-	public func shadow(_ shadowOffset: CGSize, shadowBlurRadius: CGFloat, shadowColor: UIColor) -> Text {
-		return shadow(shadowOffset, shadowBlurRadius: shadowBlurRadius, shadowColor: Color(shadowColor))
+	/// Adds a shadow to this view.
+    ///
+    /// - Parameters:
+    ///   - color: The shadow's color.
+    ///   - radius: The shadow's size.
+    ///   - x: A horizontal offset you use to position the shadow relative to
+    ///     this view.
+    ///   - y: A vertical offset you use to position the shadow relative to
+    ///     this view.
+    /// - Returns: A view that adds a shadow to this view.
+	public func shadow(color: Color = Color(.sRGB, white: 0, opacity: 0.33), radius: CGFloat, x: CGFloat = 0, y: CGFloat = 0) -> Text {
+		shadow(CGSize(width: x, height: y), shadowBlurRadius: radius, shadowColor: color)
+	}
+
+	/// Adds a shadow to this view.
+    ///
+    /// - Parameters:
+    ///   - color: The shadow's color.
+    ///   - radius: The shadow's size.
+    ///   - x: A horizontal offset you use to position the shadow relative to
+    ///     this view.
+    ///   - y: A vertical offset you use to position the shadow relative to
+    ///     this view.
+    /// - Returns: A view that adds a shadow to this view.
+	public func shadow(color: UIColor, radius: CGFloat, x: CGFloat = 0, y: CGFloat = 0) -> Text {
+		shadow(CGSize(width: x, height: y), shadowBlurRadius: radius, shadowColor: Color(color))
 	}
 	
 	/// Sets the shadow for this text.
 	///
 	/// - Parameter shadow: default NSShadow
 	/// - Returns: Text that's above or below its shadow.
-	public func shadow(_ shadow: NSShadow = NSShadow()) -> Text {
+	public func shadow(_ shadow: NSShadow) -> Text {
 		return addAttribute(.shadow, value: shadow)
 	}
 }
