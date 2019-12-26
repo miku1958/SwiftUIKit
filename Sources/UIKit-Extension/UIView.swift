@@ -48,19 +48,37 @@ extension UIView {
 	}
 	class TapGesture: UITapGestureRecognizer {
 		var text: [NSRange] = []
+		
+		private override init(target: Any?, action: Selector?) {
+			super.init(target: target, action: action)
+		}
+		typealias ActionType = (_ location: CGPoint, _ text: [NSRange]) -> Void
+		var actions = [ActionType]()
+		convenience init(action: @escaping ActionType) {
+			self.init()
+			actions.append(action)
+		}
+		override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent) {
+			if let location = touches.first?.location(in: view) {
+				actions.forEach {
+					$0(location, text)
+				}
+			}
+			super.touchesEnded(touches, with: event)
+		}
 	}
 }
 
 extension UIView {
 	private class TapGestureRecognizer: UITapGestureRecognizer {
-		var action: () -> Void
-		init(action: @escaping () -> Void) {
+		var action: (UITapGestureRecognizer) -> Void
+		init(action: @escaping (UITapGestureRecognizer) -> Void) {
 			self.action = action
 			super.init(target: nil, action: nil)
 			addTarget(self, action: #selector(performAction))
 		}
 		@objc private func performAction() {
-			action()
+			action(self)
 		}
 	}
 	
@@ -68,8 +86,16 @@ extension UIView {
     /// recognizing a tap gesture.
 	@discardableResult
 	public func onTapGesture(count: Int = 1, perform action: @escaping () -> Void) -> Self {
+		onTapGesture(count: count) { (_) in
+			action()
+		}
+	}
+    /// Returns a version of `self` that will invoke `action` after
+    /// recognizing a tap gesture.
+	@discardableResult
+	public func onTapGesture(count: Int = 1, perform action: @escaping (UITapGestureRecognizer) -> Void) -> Self {
 		let tap = TapGestureRecognizer(action: action)
-		tap.numberOfTouchesRequired = count
+		tap.numberOfTapsRequired = count
 		addGestureRecognizer(tap)
 		isUserInteractionEnabled = true
 		return self
@@ -96,11 +122,6 @@ extension UIView {
 		}
 		func locationOfTouchInTextContainer(location: CGPoint, textBoundingBox: CGRect = .zero) -> CGPoint {
 			location
-		}
-		@objc fileprivate func handleTapText(_ tap: TapGesture) {
-			if let info: Text.TapInfo = gestureWorkingInfo(location: tap.location(in: view), texts: tap.text, key: Text.tapKey) {
-				info.action()
-			}
 		}
 		@objc fileprivate func handleLongPressText(_ longPress: LongPressGesture) {
 			if let info: Text.LongPressInfo = gestureWorkingInfo(location: longPress.location(in: view), texts: longPress.text, key: Text.longPressKey) {
@@ -161,7 +182,12 @@ extension UIView._Delegate {
 					return
 				}
 
-				let tap = TapGesture(target: self, action: #selector(handleTapText(_:)))
+				let tap = TapGesture { [weak self] (location, texts) in
+					guard let self = self else { return }
+					if let info: Text.TapInfo = self.gestureWorkingInfo(location: location, texts: texts, key: Text.tapKey) {
+						info.action()
+					}
+				}
 
 				tap.numberOfTapsRequired = info.count
 
