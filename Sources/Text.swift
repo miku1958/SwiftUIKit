@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SwiftUI
 
 /// A view that displays one or more lines of read-only text.
 @available(iOS 9.0, *)//OSX 10.15, tvOS 13.0, watchOS 6.0, *)

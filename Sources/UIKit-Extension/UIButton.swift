@@ -6,7 +6,7 @@
 //  
 //
 
-import Foundation
+import UIKit
 
 extension UIButton {
 	private static var actionKey = 0
