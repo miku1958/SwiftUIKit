@@ -57,12 +57,12 @@ public struct Text {
 	}
 
 	/// Creates an instance that displays `content` verbatim. 原样逐字返回字符串
-	public init(verbatim content: StringInterpolation) {
+	public init(verbatim content: LocalizedStringKey) {
 		_text = content.attritubedString()
 	}
 	
 	/// Creates an instance that displays `content` verbatim. 先检查本地化, 如果没有再原样逐字返回字符串
-	public init(_ content: StringInterpolation) {
+	public init(_ content: LocalizedStringKey) {
 		_text = content.attritubedString(withlocalized: Bundle.main, tableName: nil, useDefaultValue: true)
 	}
 	
