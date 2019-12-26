@@ -34,13 +34,11 @@ public struct Text {
 		}
 		return result
 	}
-	static var defaultFont: Font {
-		Font.system(size: 17, weight: .regular)
-	}
+	var defaultFont = Font.system(size: 17, weight: .regular)
 	public var text: NSAttributedString {
 		if let atts = attribute(.font), !atts.isEmpty {
 			for att in atts where att.value == nil {
-				addAttribute(.font, value: Self.defaultFont.uiFont, range: att.range)
+				addAttribute(.font, value: defaultFont.uiFont, range: att.range)
 			}
 		}
 		let color = attribute(.foregroundColor)?.first?.value
@@ -173,7 +171,7 @@ extension Text {
 		if let uiFont = _text.attribute(.font, at: 0, effectiveRange: nil) as? UIFont {
 			return font(handler(Font(uiFont)))
 		} else {
-			return font(handler(Self.defaultFont))
+			return font(handler(defaultFont))
 		}
 	}
 	/// Sets the font weight of this text.

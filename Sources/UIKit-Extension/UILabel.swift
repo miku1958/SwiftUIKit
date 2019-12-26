@@ -18,10 +18,12 @@ extension UILabel {
 //		public var defaultStyle
 		public var text: Text? {
 			didSet {
-				view?.attributedText = text?.text
-				view?.numberOfLines = text?.lineLimit ?? 0
+				guard let view = view else { return }
+				text?.defaultFont = Font(view.font)
+				view.attributedText = text?.text
+				view.numberOfLines = text?.lineLimit ?? 0
 				if let scale = text?.minimumScaleFactor {
-					view?.minimumScaleFactor = scale
+					view.minimumScaleFactor = scale
 				}
 				delegate.config(text: text, tapGestrues: &tapGestrues, longPressGestrues: &longPressGestrues)
 			}
