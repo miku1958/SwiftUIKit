@@ -1,0 +1,647 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXAggregateTarget section */
+		"SwiftUIKit::SwiftUIKitPackageTests::ProductTarget" /* SwiftUIKitPackageTests */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = OBJ_65 /* Build configuration list for PBXAggregateTarget "SwiftUIKitPackageTests" */;
+			buildPhases = (
+			);
+			dependencies = (
+				OBJ_68 /* PBXTargetDependency */,
+			);
+			name = SwiftUIKitPackageTests;
+			productName = SwiftUIKitPackageTests;
+		};
+/* End PBXAggregateTarget section */
+
+/* Begin PBXBuildFile section */
+		FF64696F23B4766A00302FB0 /* applecare-products@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FF64696D23B4764400302FB0 /* applecare-products@2x.png */; };
+		FF64697623B4768300302FB0 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = FF64697123B4768300302FB0 /* Localizable.strings */; };
+		FF64697723B4768300302FB0 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = FF64697423B4768300302FB0 /* Localizable.strings */; };
+		OBJ_43 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_9 /* Color.swift */; };
+		OBJ_44 /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_10 /* Font.swift */; };
+		OBJ_49 /* Text.StringInterpolation.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_17 /* Text.StringInterpolation.swift */; };
+		OBJ_50 /* Text.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_18 /* Text.swift */; };
+		OBJ_51 /* UIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_20 /* UIButton.swift */; };
+		OBJ_52 /* UILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_21 /* UILabel.swift */; };
+		OBJ_53 /* UILabelTextStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_22 /* UILabelTextStorage.swift */; };
+		OBJ_54 /* UITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_23 /* UITextField.swift */; };
+		OBJ_55 /* UITextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_24 /* UITextView.swift */; };
+		OBJ_56 /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_25 /* UIView.swift */; };
+		OBJ_63 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_6 /* Package.swift */; };
+		OBJ_74 /* FontTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_28 /* FontTest.swift */; };
+		OBJ_75 /* TextTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_29 /* TextTest.swift */; };
+		OBJ_76 /* ViewTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_30 /* ViewTest.swift */; };
+		OBJ_78 /* SwiftUIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "SwiftUIKit::SwiftUIKit::Product" /* SwiftUIKit.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		FF64696923B4747A00302FB0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = "SwiftUIKit::SwiftUIKit";
+			remoteInfo = SwiftUIKit;
+		};
+		FF64696A23B4747B00302FB0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = "SwiftUIKit::SwiftUIKitTests";
+			remoteInfo = SwiftUIKitTests;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		FF64696D23B4764400302FB0 /* applecare-products@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "applecare-products@2x.png"; path = "Tests/applecare-products@2x.png"; sourceTree = "<group>"; };
+		FF64697223B4768300302FB0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Localizable.strings; sourceTree = "<group>"; };
+		FF64697523B4768300302FB0 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = Localizable.strings; sourceTree = "<group>"; };
+		OBJ_10 /* Font.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Font.swift; sourceTree = "<group>"; };
+		OBJ_12 /* Gesture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gesture.swift; sourceTree = "<group>"; };
+		OBJ_13 /* UIPanGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIPanGestureRecognizer.swift; sourceTree = "<group>"; };
+		OBJ_15 /* CoordinateSpace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateSpace.swift; sourceTree = "<group>"; };
+		OBJ_16 /* Velocity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Velocity.swift; sourceTree = "<group>"; };
+		OBJ_17 /* Text.StringInterpolation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Text.StringInterpolation.swift; sourceTree = "<group>"; };
+		OBJ_18 /* Text.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Text.swift; sourceTree = "<group>"; };
+		OBJ_20 /* UIButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButton.swift; sourceTree = "<group>"; };
+		OBJ_21 /* UILabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UILabel.swift; sourceTree = "<group>"; };
+		OBJ_22 /* UILabelTextStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UILabelTextStorage.swift; sourceTree = "<group>"; };
+		OBJ_23 /* UITextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextField.swift; sourceTree = "<group>"; };
+		OBJ_24 /* UITextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextView.swift; sourceTree = "<group>"; };
+		OBJ_25 /* UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
+		OBJ_28 /* FontTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontTest.swift; sourceTree = "<group>"; };
+		OBJ_29 /* TextTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextTest.swift; sourceTree = "<group>"; };
+		OBJ_30 /* ViewTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewTest.swift; sourceTree = "<group>"; };
+		OBJ_34 /* Demo */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Demo; sourceTree = SOURCE_ROOT; };
+		OBJ_35 /* SwiftUIKit */ = {isa = PBXFileReference; lastKnownFileType = folder; path = SwiftUIKit; sourceTree = SOURCE_ROOT; };
+		OBJ_36 /* SwiftUIKit.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = SwiftUIKit.podspec; sourceTree = "<group>"; };
+		OBJ_37 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		OBJ_6 /* Package.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
+		OBJ_9 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
+		"SwiftUIKit::SwiftUIKit::Product" /* SwiftUIKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SwiftUIKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		"SwiftUIKit::SwiftUIKitTests::Product" /* SwiftUIKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = SwiftUIKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		OBJ_57 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_77 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_78 /* SwiftUIKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		FF64697023B4768300302FB0 /* en.lproj */ = {
+			isa = PBXGroup;
+			children = (
+				FF64697123B4768300302FB0 /* Localizable.strings */,
+			);
+			name = en.lproj;
+			path = Tests/en.lproj;
+			sourceTree = "<group>";
+		};
+		FF64697323B4768300302FB0 /* zh-Hans.lproj */ = {
+			isa = PBXGroup;
+			children = (
+				FF64697423B4768300302FB0 /* Localizable.strings */,
+			);
+			name = "zh-Hans.lproj";
+			path = "Tests/zh-Hans.lproj";
+			sourceTree = "<group>";
+		};
+		FF64697823B476FC00302FB0 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_20 /* UIButton.swift */,
+				OBJ_21 /* UILabel.swift */,
+				OBJ_23 /* UITextField.swift */,
+				OBJ_24 /* UITextView.swift */,
+				OBJ_25 /* UIView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		FF64697923B4770E00302FB0 /* Text */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_10 /* Font.swift */,
+				OBJ_17 /* Text.StringInterpolation.swift */,
+				OBJ_18 /* Text.swift */,
+			);
+			path = Text;
+			sourceTree = "<group>";
+		};
+		OBJ_11 /* Gesture */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_12 /* Gesture.swift */,
+				OBJ_13 /* UIPanGestureRecognizer.swift */,
+			);
+			path = Gesture;
+			sourceTree = "<group>";
+		};
+		OBJ_14 /* Misc */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_9 /* Color.swift */,
+				OBJ_15 /* CoordinateSpace.swift */,
+				OBJ_16 /* Velocity.swift */,
+			);
+			path = Misc;
+			sourceTree = "<group>";
+		};
+		OBJ_19 /* UIKit-Extension */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_22 /* UILabelTextStorage.swift */,
+				OBJ_11 /* Gesture */,
+				FF64697823B476FC00302FB0 /* View */,
+			);
+			path = "UIKit-Extension";
+			sourceTree = "<group>";
+		};
+		OBJ_26 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				FF64697023B4768300302FB0 /* en.lproj */,
+				FF64697323B4768300302FB0 /* zh-Hans.lproj */,
+				FF64696D23B4764400302FB0 /* applecare-products@2x.png */,
+				OBJ_27 /* SwiftUIKitTests */,
+			);
+			name = Tests;
+			sourceTree = SOURCE_ROOT;
+		};
+		OBJ_27 /* SwiftUIKitTests */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_28 /* FontTest.swift */,
+				OBJ_29 /* TextTest.swift */,
+				OBJ_30 /* ViewTest.swift */,
+			);
+			name = SwiftUIKitTests;
+			path = Tests/SwiftUIKitTests;
+			sourceTree = SOURCE_ROOT;
+		};
+		OBJ_31 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				"SwiftUIKit::SwiftUIKit::Product" /* SwiftUIKit.framework */,
+				"SwiftUIKit::SwiftUIKitTests::Product" /* SwiftUIKitTests.xctest */,
+			);
+			name = Products;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		OBJ_5 /*  */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_6 /* Package.swift */,
+				OBJ_7 /* Sources */,
+				OBJ_26 /* Tests */,
+				OBJ_31 /* Products */,
+				OBJ_34 /* Demo */,
+				OBJ_35 /* SwiftUIKit */,
+				OBJ_36 /* SwiftUIKit.podspec */,
+				OBJ_37 /* README.md */,
+			);
+			name = "";
+			sourceTree = "<group>";
+		};
+		OBJ_7 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_8 /* SwiftUIKit */,
+			);
+			name = Sources;
+			sourceTree = SOURCE_ROOT;
+		};
+		OBJ_8 /* SwiftUIKit */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_14 /* Misc */,
+				FF64697923B4770E00302FB0 /* Text */,
+				OBJ_19 /* UIKit-Extension */,
+			);
+			name = SwiftUIKit;
+			path = Sources/SwiftUIKit;
+			sourceTree = SOURCE_ROOT;
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		"SwiftUIKit::SwiftPMPackageDescription" /* SwiftUIKitPackageDescription */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_59 /* Build configuration list for PBXNativeTarget "SwiftUIKitPackageDescription" */;
+			buildPhases = (
+				OBJ_62 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SwiftUIKitPackageDescription;
+			productName = SwiftUIKitPackageDescription;
+			productType = "com.apple.product-type.framework";
+		};
+		"SwiftUIKit::SwiftUIKit" /* SwiftUIKit */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_39 /* Build configuration list for PBXNativeTarget "SwiftUIKit" */;
+			buildPhases = (
+				OBJ_42 /* Sources */,
+				OBJ_57 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SwiftUIKit;
+			productName = SwiftUIKit;
+			productReference = "SwiftUIKit::SwiftUIKit::Product" /* SwiftUIKit.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		"SwiftUIKit::SwiftUIKitTests" /* SwiftUIKitTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_70 /* Build configuration list for PBXNativeTarget "SwiftUIKitTests" */;
+			buildPhases = (
+				OBJ_73 /* Sources */,
+				OBJ_77 /* Frameworks */,
+				FF64696E23B4766400302FB0 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				OBJ_79 /* PBXTargetDependency */,
+			);
+			name = SwiftUIKitTests;
+			productName = SwiftUIKitTests;
+			productReference = "SwiftUIKit::SwiftUIKitTests::Product" /* SwiftUIKitTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		OBJ_1 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftMigration = 9999;
+				LastUpgradeCheck = 9999;
+			};
+			buildConfigurationList = OBJ_2 /* Build configuration list for PBXProject "SwiftUIKit" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				"zh-Hans",
+			);
+			mainGroup = OBJ_5 /*  */;
+			productRefGroup = OBJ_31 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				"SwiftUIKit::SwiftUIKit" /* SwiftUIKit */,
+				"SwiftUIKit::SwiftPMPackageDescription" /* SwiftUIKitPackageDescription */,
+				"SwiftUIKit::SwiftUIKitPackageTests::ProductTarget" /* SwiftUIKitPackageTests */,
+				"SwiftUIKit::SwiftUIKitTests" /* SwiftUIKitTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		FF64696E23B4766400302FB0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FF64696F23B4766A00302FB0 /* applecare-products@2x.png in Resources */,
+				FF64697723B4768300302FB0 /* Localizable.strings in Resources */,
+				FF64697623B4768300302FB0 /* Localizable.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		OBJ_42 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_43 /* Color.swift in Sources */,
+				OBJ_44 /* Font.swift in Sources */,
+				OBJ_49 /* Text.StringInterpolation.swift in Sources */,
+				OBJ_50 /* Text.swift in Sources */,
+				OBJ_51 /* UIButton.swift in Sources */,
+				OBJ_52 /* UILabel.swift in Sources */,
+				OBJ_53 /* UILabelTextStorage.swift in Sources */,
+				OBJ_54 /* UITextField.swift in Sources */,
+				OBJ_55 /* UITextView.swift in Sources */,
+				OBJ_56 /* UIView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_62 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_63 /* Package.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_73 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_74 /* FontTest.swift in Sources */,
+				OBJ_75 /* TextTest.swift in Sources */,
+				OBJ_76 /* ViewTest.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		OBJ_68 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = "SwiftUIKit::SwiftUIKitTests" /* SwiftUIKitTests */;
+			targetProxy = FF64696A23B4747B00302FB0 /* PBXContainerItemProxy */;
+		};
+		OBJ_79 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = "SwiftUIKit::SwiftUIKit" /* SwiftUIKit */;
+			targetProxy = FF64696923B4747A00302FB0 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		FF64697123B4768300302FB0 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FF64697223B4768300302FB0 /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		FF64697423B4768300302FB0 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FF64697523B4768300302FB0 /* zh-Hans */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		OBJ_3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_NS_ASSERTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"SWIFT_PACKAGE=1",
+					"DEBUG=1",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_SWIFT_FLAGS = "$(inherited) -DXcode";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator appletvos appletvsimulator watchos watchsimulator";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) SWIFT_PACKAGE DEBUG";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				USE_HEADERMAP = NO;
+			};
+			name = Debug;
+		};
+		OBJ_4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"SWIFT_PACKAGE=1",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				OTHER_SWIFT_FLAGS = "$(inherited) -DXcode";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator appletvos appletvsimulator watchos watchsimulator";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) SWIFT_PACKAGE";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				USE_HEADERMAP = NO;
+			};
+			name = Release;
+		};
+		OBJ_40 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = SwiftUIKit.xcodeproj/SwiftUIKit_Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) $(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				OTHER_CFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = SwiftUIKit;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited)";
+				SWIFT_VERSION = 5.0;
+				TARGET_NAME = SwiftUIKit;
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Debug;
+		};
+		OBJ_41 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = SwiftUIKit.xcodeproj/SwiftUIKit_Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) $(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				OTHER_CFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = SwiftUIKit;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited)";
+				SWIFT_VERSION = 5.0;
+				TARGET_NAME = SwiftUIKit;
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Release;
+		};
+		OBJ_60 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				LD = /usr/bin/true;
+				OTHER_SWIFT_FLAGS = "-swift-version 5 -I $(TOOLCHAIN_DIR)/usr/lib/swift/pm/4_2 -target x86_64-apple-macosx10.10 -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk -package-description-version 5.1";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		OBJ_61 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				LD = /usr/bin/true;
+				OTHER_SWIFT_FLAGS = "-swift-version 5 -I $(TOOLCHAIN_DIR)/usr/lib/swift/pm/4_2 -target x86_64-apple-macosx10.10 -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk -package-description-version 5.1";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		OBJ_66 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		OBJ_67 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Release;
+		};
+		OBJ_71 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = SwiftUIKit.xcodeproj/SwiftUIKitTests_Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				OTHER_CFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited)";
+				SWIFT_VERSION = 5.0;
+				TARGET_NAME = SwiftUIKitTests;
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Debug;
+		};
+		OBJ_72 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = SwiftUIKit.xcodeproj/SwiftUIKitTests_Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				OTHER_CFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited)";
+				SWIFT_VERSION = 5.0;
+				TARGET_NAME = SwiftUIKitTests;
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		OBJ_2 /* Build configuration list for PBXProject "SwiftUIKit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_3 /* Debug */,
+				OBJ_4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		OBJ_39 /* Build configuration list for PBXNativeTarget "SwiftUIKit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_40 /* Debug */,
+				OBJ_41 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		OBJ_59 /* Build configuration list for PBXNativeTarget "SwiftUIKitPackageDescription" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_60 /* Debug */,
+				OBJ_61 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		OBJ_65 /* Build configuration list for PBXAggregateTarget "SwiftUIKitPackageTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_66 /* Debug */,
+				OBJ_67 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		OBJ_70 /* Build configuration list for PBXNativeTarget "SwiftUIKitTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_71 /* Debug */,
+				OBJ_72 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = OBJ_1 /* Project object */;
+}

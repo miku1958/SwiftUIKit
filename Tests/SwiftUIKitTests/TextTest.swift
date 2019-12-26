@@ -13,7 +13,8 @@ class TextTest: XCTestCase {
 	func test_defaultText() {
 		let para = NSMutableParagraphStyle()
 		para.lineSpacing = 2
-		XCTAssert(Text("abc").text.isEqual(to: NSAttributedString(string: "abc", attributes: [.paragraphStyle: para, .font: Text.defaultFont.uiFont])))
+		let text = Text("abc")
+		XCTAssert(text.text.isEqual(to: NSAttributedString(string: "abc", attributes: [.paragraphStyle: para, .font: text.defaultFont.uiFont])))
 	}
 	func test_localized() {
 		XCTAssert(Text("首页", tableName: nil, bundle: Bundle(for: Self.self), comment: nil).text.string == "home")
@@ -22,7 +23,7 @@ class TextTest: XCTestCase {
 	func test_function() {
 		var text = Text("testString")
 		
-		XCTAssert(text.text.attributes(at: 0, effectiveRange: nil)[.font] as? UIFont == Text.defaultFont.uiFont)
+		XCTAssert(text.text.attributes(at: 0, effectiveRange: nil)[.font] as? UIFont == text.defaultFont.uiFont)
 		
 		text = text.foregroundColor(Color.red)
 		XCTAssert(text.text.attributes(at: 0, effectiveRange: nil)[.foregroundColor] as? UIColor == .red)
@@ -211,7 +212,7 @@ class TextTest: XCTestCase {
 		
 		let para = NSMutableParagraphStyle()
 		para.lineSpacing = 2
-		testAttStr.addAttributes([.paragraphStyle: para, .font: Text.defaultFont.uiFont], range: NSRange(location: 0, length: testAttStr.length))
+		testAttStr.addAttributes([.paragraphStyle: para, .font: Text("").defaultFont.uiFont], range: NSRange(location: 0, length: testAttStr.length))
 		
 		XCTAssert(Text("\(attributeStr)").text == testAttStr)
 	}
