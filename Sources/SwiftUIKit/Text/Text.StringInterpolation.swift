@@ -42,7 +42,8 @@ extension Text.StringInterpolation.Content: StringInterpolationProtocol {
 	public mutating func appendLiteral(_ literal: String) {
 		cachedString += literal
 	}
-	public mutating func appendInterpolation(_ image: UIImage, width: CGFloat? = nil, height: CGFloat? = nil, offset: CGFloat = -2) {
+	public mutating func appendInterpolation(_ image: UIImage?, width: CGFloat? = nil, height: CGFloat? = nil, offset: CGFloat = -2) {
+		guard let image = image else { return }
 		appendLiteral(Placeholder.image)
 		cachingImage.append((image, width, height, offset))
 	}
@@ -181,7 +182,8 @@ extension Text.StringInterpolation.Content {
 }
 extension Text.StringInterpolation.Content {
 	//编译器bug, 当存在两条并且其中一条有多个参数的时候, 自动补全就不显示那条多参数的, 所以这里加一条方便提示, 等这个bug修了可以去掉
-	public mutating func appendInterpolation(_ image: UIImage) {
+	public mutating func appendInterpolation(_ image: UIImage?) {
+		guard let image = image else { return }
 		appendLiteral(Placeholder.image)
 		cachingImage.append((image, nil, nil, -2))
 	}
