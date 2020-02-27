@@ -143,7 +143,16 @@ extension Text.StringInterpolation {
 }
 
 extension Text.StringInterpolation.Content {
+	public mutating func appendInterpolation<T>(_ value: T) where T : CustomStringConvertible, T : TextOutputStreamable {
+		cachedString += "\(value)"
+	}
+	public mutating func appendInterpolation<T>(_ value: T) where T : TextOutputStreamable {
+		cachedString += "\(value)"
+	}
 	
+	public mutating func appendInterpolation<T>(_ value: T) where T : CustomStringConvertible {
+		cachedString += "\(value)"
+	}
 	public mutating func appendInterpolation<Subject>(_ subject: Subject, formatter: Formatter? = nil) where Subject : ReferenceConvertible {
 
 		appendLiteral(Placeholder.attributedString)

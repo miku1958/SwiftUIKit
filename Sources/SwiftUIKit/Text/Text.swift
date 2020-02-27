@@ -65,7 +65,9 @@ public struct Text {
 	public init(_ content: LocalizedStringKey) {
 		_text = content.attritubedString(withlocalized: Bundle.main, tableName: nil, useDefaultValue: true)
 	}
-	
+	public init(_ content: String) {
+		_text = NSMutableAttributedString(string: content)
+	}
 	public typealias LocalizedStringKey = StringInterpolation
 	/// Creates text that displays localized content identified by a key.
 	///
