@@ -47,6 +47,13 @@ extension Text.StringInterpolation.Content: StringInterpolationProtocol {
 		appendLiteral(Placeholder.image)
 		cachingImage.append((image, width, height, offset))
 	}
+	public mutating func appendInterpolation(_ image: UIImage, width: CGFloat? = nil, height: CGFloat? = nil, offset: CGFloat = -2) {
+		appendLiteral(Placeholder.image)
+		cachingImage.append((image, width, height, offset))
+	}
+	public mutating func appendInterpolation(_ literal: String?) {
+		cachedString += literal ?? ""
+	}
 	public mutating func appendInterpolation(_ attStr: NSAttributedString) {
 		appendLiteral(Placeholder.attributedString)
 		cachingAttributedString.append(attStr)
