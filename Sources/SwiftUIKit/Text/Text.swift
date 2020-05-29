@@ -441,6 +441,16 @@ extension Text {
 		}
 	}
 	
+	/// Sets the amount of height of each line of text in this view.
+	///
+	/// - Parameter lineHeight: The range of height of each line
+	public func lineHeight(_ lineHeight: ClosedRange<CGFloat>) -> Text {
+		changeParagraphStyle { (para) in
+			para.maximumLineHeight = lineHeight.upperBound
+			para.minimumLineHeight = lineHeight.lowerBound
+		}
+	}
+	
     /// Sets whether text in this view can compress the space between characters
     /// when necessary to fit text in a line.
     ///
