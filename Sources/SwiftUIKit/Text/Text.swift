@@ -18,6 +18,7 @@ public struct Text {
 	var lineLimit: Int?
 	var minimumScaleFactor: CGFloat?
 	
+	/// 查找_text里所有subString里key对应的属性
 	private func attribute(_ key: NSAttributedString.Key) -> [(value: Any?, range: NSRange)]? {
 		
 		var index = 0
@@ -25,12 +26,8 @@ public struct Text {
 		while index < _text.length {
 			var range: NSRange = NSRange()
 			let attribute = _text.attribute(key, at: index, effectiveRange: &range)
-			if range.length > 0 {
-				result.append((attribute, range))
-				index += range.length
-			} else {
-				break
-			}
+			result.append((attribute, range))
+			index += range.length
 		}
 		return result
 	}
