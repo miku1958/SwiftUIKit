@@ -25,10 +25,10 @@ class TextTest: XCTestCase {
 		
 		XCTAssert(text.text.attributes(at: 0, effectiveRange: nil)[.font] as? UIFont == text.defaultFont.uiFont)
 		
-		text = text.foregroundColor(Color.red)
+		text = text.foregroundColor(.red)
 		XCTAssert(text.text.attributes(at: 0, effectiveRange: nil)[.foregroundColor] as? UIColor == .red)
 		
-		text = text.background(Color.black)
+		text = text.background(.black)
 		XCTAssert(text.text.attributes(at: 0, effectiveRange: nil)[.backgroundColor] as? UIColor == .black)
 			
 		_={
@@ -151,11 +151,12 @@ class TextTest: XCTestCase {
 	}
 	func test_Image() {
 		let image = UIImage(contentsOfFile: Bundle(for: Self.self).path(forResource: "applecare-products@2x.png", ofType: nil)!)!
-		
+		print("\(image)")
 		_={
 			let width = CGFloat.random(in: 0..<100)
 			let offset = CGFloat.random(in: 0..<100)
-			let att = Text("\(image, width: width, offset: offset)").text.attributes(at: 0, effectiveRange: nil)
+			let attributeText = Text("\(image, width: width, offset: offset)").text
+			let att = attributeText.attributes(at: 0, effectiveRange: nil)
 			guard
 				let attachment = att[.attachment] as? NSTextAttachment
 			else {
@@ -207,7 +208,7 @@ class TextTest: XCTestCase {
 		}()
 	}
 	func test_Attribute() {
-		let attributeStr = NSAttributedString(string: "testStr", attributes: [.foregroundColor:UIColor.red])
+		let attributeStr = NSAttributedString(string: "testStr", attributes: [.foregroundColor: UIColor.red])
 		let testAttStr = attributeStr.mutableCopy() as! NSMutableAttributedString
 		
 		let para = NSMutableParagraphStyle()
@@ -216,5 +217,46 @@ class TextTest: XCTestCase {
 		
 		XCTAssert(Text("\(attributeStr)").text == testAttStr)
 	}
-
+	func test_lineHeight() {
+		
+		let testAttStr = NSAttributedString(string: "abc").mutableCopy() as! NSMutableAttributedString
+		let checkText = Text("abc")
+		let min = CGFloat.random(in: 0...10)
+		let max = CGFloat.random(in: 10...30)
+		let para = NSMutableParagraphStyle()
+		para.lineSpacing = 2
+		para.minimumLineHeight = min
+		para.maximumLineHeight = min
+		testAttStr.addAttributes([.paragraphStyle: para, .font: Text("").defaultFont.uiFont], range: NSRange(location: 0, length: testAttStr.length))
+		
+		XCTAssert(checkText.lineHeight(min).text == testAttStr)
+		
+		
+		para.maximumLineHeight = max
+		testAttStr.addAttributes([.paragraphStyle: para, .font: checkText.defaultFont.uiFont], range: NSRange(location: 0, length: testAttStr.length))
+		
+		XCTAssert(checkText.lineHeight(min...max).text == testAttStr)
+	}
+	
+	func test_ExpressibleByStringLiteral() {
+		
+		let str = "abc"
+		let text: Text = "abc"
+		XCTAssert(text.text.string == str)
+	}
+	
+	
+	func test_TextProtocol() {
+		let str = "abc"
+		let text = Text(str)
+		let text1 = str.font(.body)
+		let text2 = text.font(.body)
+		let text3 = [str].font(.body)
+		let text4 = [text].font(.body)
+		
+		
+		XCTAssert(text1 == text2)
+		XCTAssert(text2 == text3)
+		XCTAssert(text3 == text4)
+	}
 }

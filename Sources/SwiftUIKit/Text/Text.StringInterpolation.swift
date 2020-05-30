@@ -7,83 +7,76 @@
 //
 
 import UIKit
-
-extension Text {
-	public struct StringInterpolation {
-		private let content: Content
-	}
-}
-extension Text.StringInterpolation {
-	public struct Content {
-		var cachedString = ""
-		var cachingImage: [(image: UIImage, width: CGFloat?, height: CGFloat?, offset: CGFloat)] = []
-		var cachingAttributedString: [NSAttributedString] = []
-	}
-}
-extension Text.StringInterpolation.Content {
-	struct Placeholder {
-		static let image = "*&^SwiftUIKit.Text.image*&^"
-		static let attributedString = "*&^SwiftUIKit.Text.attributedString*&^"
-	}
-}
-extension Text.StringInterpolation: ExpressibleByStringInterpolation {
-	public init(stringInterpolation: Content) {
-		content = stringInterpolation
-	}
+class Interceptor {
+	static let `default` = Interceptor()
 	
-	public init(stringLiteral value: String) {
-		content = Content(cachedString: value)
+	lazy var cachingImage: [String: (image: UIImage, width: CGFloat?, height: CGFloat?, offset: CGFloat)] = [:]
+	lazy var cachingAttributedString: [String: NSAttributedString] = [:]
+	
+	enum Placeholder {
+		case image
+		case attributedString
+		
+		var begin: String {
+			switch self {
+			case .image:
+				return "\u{FFF9}\u{FFFC}\u{FFFA}"
+			case .attributedString:
+				return "\u{FFF9}\u{FFFC}\u{FFFC}\u{FFFA}"
+			}
+		}
+		static let end = "\u{FFFB}\u{FFFC}\u{FFFA}"
+		func new(_ obj: CustomStringConvertible) -> String {
+			begin + "\(obj)" + Self.end
+		}
 	}
 }
-extension Text.StringInterpolation.Content: StringInterpolationProtocol {
-	public init(literalCapacity: Int, interpolationCount: Int) {
-		cachedString = ""
-	}
-	public mutating func appendLiteral(_ literal: String) {
-		cachedString += literal
-	}
+
+extension String.StringInterpolation {
 	public mutating func appendInterpolation(_ image: UIImage?, width: CGFloat? = nil, height: CGFloat? = nil, offset: CGFloat = -2) {
 		guard let image = image else { return }
-		appendLiteral(Placeholder.image)
-		cachingImage.append((image, width, height, offset))
+		let placeholder = Interceptor.Placeholder.image.new(image)
+		appendLiteral(placeholder)
+		Interceptor.default.cachingImage[placeholder] = (image, width, height, offset)
 	}
 	public mutating func appendInterpolation(_ image: UIImage, width: CGFloat? = nil, height: CGFloat? = nil, offset: CGFloat = -2) {
-		appendLiteral(Placeholder.image)
-		cachingImage.append((image, width, height, offset))
+		let placeholder = Interceptor.Placeholder.image.new(image)
+		appendLiteral(placeholder)
+		Interceptor.default.cachingImage[placeholder] = (image, width, height, offset)
 	}
-	public mutating func appendInterpolation(_ literal: String?) {
-		cachedString += literal ?? ""
-	}
+
 	public mutating func appendInterpolation(_ attStr: NSAttributedString) {
-		appendLiteral(Placeholder.attributedString)
-		cachingAttributedString.append(attStr)
+		let placeholder = Interceptor.Placeholder.attributedString.new(attStr)
+		appendLiteral(placeholder)
+		Interceptor.default.cachingAttributedString[placeholder] = attStr
 	}
 }
-extension Text.StringInterpolation {
+extension String {
 	func attritubedString(withlocalized bundle: Bundle? = nil, tableName: String? = nil, useDefaultValue: Bool) -> NSMutableAttributedString {
-		checkPlaceholder(in: content.cachedString) {
+		checkPlaceholder(in: self) {
 			(bundle ?? Bundle.main).localizedString(forKey: $0, value: useDefaultValue ? $0 : nil, table: tableName)
 		}
 	}
 	func attritubedString() -> NSMutableAttributedString {
-		checkPlaceholder(in: content.cachedString) { $0 }
+		checkPlaceholder(in: self) { $0 }
 	}
 	func checkPlaceholder(in string: String, handlePlainString: (String) -> String) -> NSMutableAttributedString {
 		let attStr = NSMutableAttributedString()
-		var cachingImage = content.cachingImage
-		var cachingAttributedString = content.cachingAttributedString
 		var string = string
 		var finish = false
 		while !finish {
 			func appendImage(range: Range<String.Index>) {
 				let prefix = string[string.startIndex ..< range.lowerBound]
 				attStr.append(NSAttributedString(string: handlePlainString(String(prefix))))
+				defer {
+					string = String(string[range.upperBound ..< string.endIndex])
+				}
+				let key = String(string[range])
+				guard let image = Interceptor.default.cachingImage.removeValue(forKey: key) else { return }
 				
 				/*handle image*/
-				let image = cachingImage.removeFirst()
-				
 				let atr = NSMutableAttributedString(string: "\u{FFFC}")
-
+				
 				let attach = NSTextAttachment()
 				attach.image = image.image
 				
@@ -100,36 +93,37 @@ extension Text.StringInterpolation {
 				case let (nil, .some(height)):
 					size = CGSize(width: height / imgHeight * imgWidth, height: height)
 				}
-
+				
 				let bounds = CGRect(origin: CGPoint(x: 0, y: image.offset), size: size)
 				
 				attach.bounds = bounds
 				atr.setAttributes([.attachment: attach], range: NSRange(location: 0, length: atr.length))
 				attStr.append(atr)
 				/*handle image end*/
-				
-				string = String(string[range.upperBound ..< string.endIndex])
 			}
 			func appendAttributeString(range: Range<String.Index>) {
 				let prefix = string[string.startIndex ..< range.lowerBound]
 				attStr.append(NSAttributedString(string: handlePlainString(String(prefix))))
+				defer {
+					string = String(string[range.upperBound ..< string.endIndex])
+				}
+				let key = String(string[range])
+				guard let attributed = Interceptor.default.cachingAttributedString.removeValue(forKey: key) else { return }
 				
 				/*handle attributedString*/
-				let attributed = cachingAttributedString.removeFirst()
 				attStr.append(attributed)
 				/*handle attributedString end*/
-				
-				string = String(string[range.upperBound ..< string.endIndex])
 			}
-			let range = [Content.Placeholder.image, Content.Placeholder.attributedString]
+			let beginRange = [Interceptor.Placeholder.image.begin, Interceptor.Placeholder.attributedString.begin]
 				.compactMap { string.range(of: $0) }
 				.sorted { $0.lowerBound < $1.lowerBound }
 				.first
-			if let range = range {
-				switch String(string[range]) {
-				case Content.Placeholder.image:
+			if let beginRange = beginRange, let endRange = string.range(of: Interceptor.Placeholder.end) {
+				let range = Range<String.Index>(uncheckedBounds: (beginRange.lowerBound, endRange.upperBound))
+				switch String(string[beginRange]) {
+				case Interceptor.Placeholder.image.begin:
 					appendImage(range: range)
-				case Content.Placeholder.attributedString:
+				case Interceptor.Placeholder.attributedString.begin:
 					appendAttributeString(range: range)
 				default: break
 				}
@@ -150,33 +144,24 @@ extension Text.StringInterpolation {
 	}
 }
 
-extension Text.StringInterpolation.Content {
-	public mutating func appendInterpolation<T>(_ value: T) where T : CustomStringConvertible, T : TextOutputStreamable {
-		cachedString += "\(value)"
-	}
-	public mutating func appendInterpolation<T>(_ value: T) where T : TextOutputStreamable {
-		cachedString += "\(value)"
+extension String.StringInterpolation {
+
+	public mutating func appendInterpolation<Subject>(_ subject: Subject, formatter: Formatter? = nil) where Subject : ReferenceConvertible {
+		let placeholder = Interceptor.Placeholder.attributedString.new("\(subject)")
+		appendLiteral(placeholder)
+		let para = NSMutableParagraphStyle()
+		para.lineSpacing = 2
+		let atts = [
+			NSAttributedString.Key.paragraphStyle: para
+		]
+		let subject = subject as Any
+		let attstr = formatter?.attributedString(for: subject, withDefaultAttributes: atts) ?? NSMutableAttributedString(string: "\(subject)", attributes: atts)
+		Interceptor.default.cachingAttributedString[placeholder] = attstr
 	}
 	
-	public mutating func appendInterpolation<T>(_ value: T) where T : CustomStringConvertible {
-		cachedString += "\(value)"
-	}
-	public mutating func appendInterpolation<Subject>(_ subject: Subject, formatter: Formatter? = nil) where Subject : ReferenceConvertible {
-
-		appendLiteral(Placeholder.attributedString)
-		let para = NSMutableParagraphStyle()
-		para.lineSpacing = 2
-		let atts = [
-			NSAttributedString.Key.paragraphStyle: para
-		]
-		let subject = subject as Any
-		let attstr = formatter?.attributedString(for: subject, withDefaultAttributes: atts) ?? NSMutableAttributedString(string: "\(subject)", attributes: atts)
-		cachingAttributedString.append(attstr)
-	}
-
 	public mutating func appendInterpolation<Subject>(_ subject: Subject, formatter: Formatter? = nil) where Subject : NSObject {
-
-		appendLiteral(Placeholder.attributedString)
+		let placeholder = Interceptor.Placeholder.attributedString.new("\(subject)")
+		appendLiteral(placeholder)
 		let para = NSMutableParagraphStyle()
 		para.lineSpacing = 2
 		let atts = [
@@ -184,14 +169,15 @@ extension Text.StringInterpolation.Content {
 		]
 		let subject = subject as Any
 		let attstr = formatter?.attributedString(for: subject, withDefaultAttributes: atts) ?? NSMutableAttributedString(string: "\(subject)", attributes: atts)
-		cachingAttributedString.append(attstr)
+		Interceptor.default.cachingAttributedString[placeholder] = attstr
 	}
 }
-extension Text.StringInterpolation.Content {
+extension String.StringInterpolation {
 	//编译器bug, 当存在两条并且其中一条有多个参数的时候, 自动补全就不显示那条多参数的, 所以这里加一条方便提示, 等这个bug修了可以去掉
 	public mutating func appendInterpolation(_ image: UIImage?) {
 		guard let image = image else { return }
-		appendLiteral(Placeholder.image)
-		cachingImage.append((image, nil, nil, -2))
+		let placeholder = Interceptor.Placeholder.image.new(image)
+		appendLiteral(placeholder)
+		Interceptor.default.cachingImage[placeholder] = (image, nil, nil, -2)
 	}
 }

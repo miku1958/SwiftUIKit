@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol TextProtocol {
+	var mainText: Text { get }
+}
+
 /// A view that displays one or more lines of read-only text.
 @available(iOS 9.0, *)//OSX 10.15, tvOS 13.0, watchOS 6.0, *)
 public struct Text {
@@ -20,7 +24,6 @@ public struct Text {
 	
 	/// 查找_text里所有subString里key对应的属性
 	private func attribute(_ key: NSAttributedString.Key) -> [(value: Any?, range: NSRange)]? {
-		
 		var index = 0
 		var result: [(value: Any?, range: NSRange)] = []
 		while index < _text.length {
@@ -62,7 +65,7 @@ public struct Text {
 	public init(_ content: LocalizedStringKey) {
 		_text = content.attritubedString(withlocalized: Bundle.main, tableName: nil, useDefaultValue: true)
 	}
-	public typealias LocalizedStringKey = StringInterpolation
+	public typealias LocalizedStringKey = String
 	/// Creates text that displays localized content identified by a key.
 	///
 	/// - Parameters:
@@ -76,7 +79,6 @@ public struct Text {
 		_text = key.attritubedString(withlocalized: bundle, tableName: tableName, useDefaultValue: false)
 	}
 }
-
 
 extension Text {
 	public static func + (lhs: Text, rhs: Text) -> Text {
@@ -119,30 +121,18 @@ extension Text {
 		return self
 	}
 }
-extension Text {
-
-	/// Sets the color of this text.
-	///
-	/// - Parameter color: The color to use when displaying this text.
-	/// - Returns: Text that uses the color value you supply.
-	public func foregroundColor(_ color: Color?) -> Text {
-		addAttribute(.foregroundColor, value: color?.uiColor)
-	}
+extension TextProtocol {
 	
 	/// Sets the color of this text.
 	///
 	/// - Parameter color: The color to use when displaying this text.
 	/// - Returns: Text that uses the color value you supply.
 	public func foregroundColor(_ color: UIColor?) -> Text {
-		addAttribute(.foregroundColor, value: color)
-	}
-	
-	public func background(_ background: Color) -> Text {
-		addAttribute(.backgroundColor, value: background.uiColor)
+		mainText.addAttribute(.foregroundColor, value: color)
 	}
 	
 	public func background(_ background: UIColor) -> Text {
-		addAttribute(.backgroundColor, value: background)
+		mainText.addAttribute(.backgroundColor, value: background)
 	}
 	
 	/// Sets the font to use when displaying this text.
@@ -150,7 +140,7 @@ extension Text {
 	/// - Parameter font: The font to use when displaying this text.
 	/// - Returns: Text that uses the font you specify.
 	public func font(_ font: Font?) -> Text {
-		addAttribute(.font, value: font?.uiFont)
+		mainText.addAttribute(.font, value: font?.uiFont)
 	}
 	
 	/// Sets the font to use when displaying this text.
@@ -158,14 +148,15 @@ extension Text {
 	/// - Parameter font: The font to use when displaying this text.
 	/// - Returns: Text that uses the font you specify.
 	public func font(_ font: UIFont?) -> Text {
-		addAttribute(.font, value: font)
+		mainText.addAttribute(.font, value: font)
 	}
 	
 	func handleFont(_ handler: (Font) -> Font) -> Text {
-		if let uiFont = _text.attribute(.font, at: 0, effectiveRange: nil) as? UIFont {
+		let text = mainText
+		if let uiFont = text._text.attribute(.font, at: 0, effectiveRange: nil) as? UIFont {
 			return font(handler(Font(uiFont)))
 		} else {
-			return font(handler(defaultFont))
+			return font(handler(text.defaultFont))
 		}
 	}
 	/// Sets the font weight of this text.
@@ -196,6 +187,7 @@ extension Text {
 		}
 	}
 	
+	
 	/// Applies a strikethrough to this text.
 	///
 	/// - Parameters:
@@ -204,14 +196,15 @@ extension Text {
 	///   - color: The color of the strikethrough. If `color` is `nil`, the
 	///     strikethrough uses the default foreground color.
 	/// - Returns: Text with a line through its center.
-	public func strikethrough(_ active: Bool = true, color: Color? = nil) -> Text {
-		addAttribute(.strikethroughColor, value: active ? color?.uiColor : nil)
-		addAttribute(.strikethroughStyle, value: NSUnderlineStyle.single.rawValue)
-
+	func strikethrough(_ active: Bool = true, color: UIColor? = nil) -> Text {
+		let text = mainText
+		text.addAttribute(.strikethroughColor, value: active ? color : nil)
+		text.addAttribute(.strikethroughStyle, value: NSUnderlineStyle.single.rawValue)
+		
 		if active && color == nil {
-			addAttribute(.strikethroughColor, value: NSNull())
+			text.addAttribute(.strikethroughColor, value: NSNull())
 		}
-		return self
+		return text
 	}
 	
 	/// Applies an underline to this text.
@@ -222,14 +215,15 @@ extension Text {
 	///   - color: The color of the underline. If `color` is `nil`, the
 	///     underline uses the default foreground color.
 	/// - Returns: Text with a line running along its baseline.
-	public func underline(_ active: Bool = true, color: Color? = nil) -> Text {
-		addAttribute(.underlineColor, value: active ? color?.uiColor : nil)
-		addAttribute(.underlineStyle, value: NSUnderlineStyle.single.rawValue)
+	public func underline(_ active: Bool = true, color: UIColor? = nil) -> Text {
+		let text = mainText
+		text.addAttribute(.underlineColor, value: active ? color : nil)
+		text.addAttribute(.underlineStyle, value: NSUnderlineStyle.single.rawValue)
 		
 		if active && color == nil {
-			addAttribute(.underlineColor, value: NSNull())
+			text.addAttribute(.underlineColor, value: NSNull())
 		}
-		return self
+		return text
 	}
 	
 	/// Sets the kerning for this text.
@@ -240,7 +234,7 @@ extension Text {
 	///   and a negative kern indicates a shift closer to the current character.
 	/// - Returns: Text with the specified amount of kerning.
 	public func kerning(_ kerning: CGFloat) -> Text {
-		addAttribute(.kern, value: kerning)
+		mainText.addAttribute(.kern, value: kerning)
 	}
 	
 	/// Sets the tracking for this text.
@@ -256,10 +250,11 @@ extension Text {
 	///   Using kCTTrackingAttributeName imported in iOS 10, not working in iOS 9
 	
 	public func tracking(_ tracking: CGFloat) -> Text {
+		let text = mainText
 		if #available(iOS 10.0, *) {
-			return addAttribute(kCTTrackingAttributeName as NSAttributedString.Key, value: tracking)
+			return text.addAttribute(kCTTrackingAttributeName as NSAttributedString.Key, value: tracking)
 		} else {
-			return self
+			return text
 		}
 	}
 	
@@ -269,7 +264,7 @@ extension Text {
 	///   (up or down) in relation to its baseline.
 	/// - Returns: Text that's above or below its baseline.
 	public func baselineOffset(_ baselineOffset: CGFloat) -> Text {
-		addAttribute(.baselineOffset, value: baselineOffset)
+		mainText.addAttribute(.baselineOffset, value: baselineOffset)
 	}
 	
 	/// Sets the shadow for this text.
@@ -278,27 +273,14 @@ extension Text {
 	/// - Parameter shadowBlurRadius: blur radius of the shadow in default user space units
 	/// - Parameter shadowColor: color used for the shadow (default is black with an alpha value of 1/3)
 	/// - Returns: Text that's above or below its shadow.
-	func shadow(_ shadowOffset: CGSize, shadowBlurRadius: CGFloat, shadowColor: Color? = nil) -> Text {
+	func shadow(_ shadowOffset: CGSize, shadowBlurRadius: CGFloat, shadowColor: UIColor? = nil) -> Text {
 		let shadow = NSShadow()
 		shadow.shadowOffset = shadowOffset
 		shadow.shadowBlurRadius = shadowBlurRadius
-		if let color = shadowColor?.uiColor {
+		if let color = shadowColor {
 			shadow.shadowColor = color
 		}
-		return addAttribute(.shadow, value: shadow)
-	}
-	/// Adds a shadow to this view.
-    ///
-    /// - Parameters:
-    ///   - color: The shadow's color.
-    ///   - radius: The shadow's size.
-    ///   - x: A horizontal offset you use to position the shadow relative to
-    ///     this view.
-    ///   - y: A vertical offset you use to position the shadow relative to
-    ///     this view.
-    /// - Returns: A view that adds a shadow to this view.
-	public func shadow(color: Color = Color(.sRGB, white: 0, opacity: 0.33), radius: CGFloat, x: CGFloat = 0, y: CGFloat = 0) -> Text {
-		shadow(CGSize(width: x, height: y), shadowBlurRadius: radius, shadowColor: color)
+		return mainText.addAttribute(.shadow, value: shadow)
 	}
 
 	/// Adds a shadow to this view.
@@ -311,8 +293,8 @@ extension Text {
     ///   - y: A vertical offset you use to position the shadow relative to
     ///     this view.
     /// - Returns: A view that adds a shadow to this view.
-	public func shadow(color: UIColor, radius: CGFloat, x: CGFloat = 0, y: CGFloat = 0) -> Text {
-		shadow(CGSize(width: x, height: y), shadowBlurRadius: radius, shadowColor: Color(color))
+	public func shadow(color: UIColor = UIColor(.sRGB, white: 0, opacity: 0.33), radius: CGFloat, x: CGFloat = 0, y: CGFloat = 0) -> Text {
+		shadow(CGSize(width: x, height: y), shadowBlurRadius: radius, shadowColor: color)
 	}
 	
 	/// Sets the shadow for this text.
@@ -320,36 +302,36 @@ extension Text {
 	/// - Parameter shadow: default NSShadow
 	/// - Returns: Text that's above or below its shadow.
 	public func shadow(_ shadow: NSShadow) -> Text {
-		return addAttribute(.shadow, value: shadow)
+		return mainText.addAttribute(.shadow, value: shadow)
 	}
 }
 
 extension Text {
 	static let longPressKey = NSAttributedString.Key("longPressKey")
 	typealias LongPressInfo = (minimumDuration: TimeInterval, maximumDistance: CGFloat, pressing: ((Bool) -> Void)?, action: () -> Void)
-	
+	static let tapKey = NSAttributedString.Key("tapKey")
+	typealias TapInfo = (count: Int, action: () -> Void)
+}
+
+extension TextProtocol {
     /// Returns a version of `self` that will invoke `action` after
     /// recognizing a longPress gesture.
 	public func onLongPressGesture(minimumDuration: TimeInterval = 0.5, maximumDistance: CGFloat = 10, pressing: ((Bool) -> Void)? = nil, perform action: @escaping () -> Void) -> Text {
-		var text = self
+		var text = mainText
 		text.useLongPress = true
-		let value: LongPressInfo = (minimumDuration, maximumDistance, pressing, action)
-		return text.addAttribute(Self.longPressKey, value: value)
+		let value: Text.LongPressInfo = (minimumDuration, maximumDistance, pressing, action)
+		return text.addAttribute(Text.longPressKey, value: value)
 	}
-	
-	static let tapKey = NSAttributedString.Key("tapKey")
-	typealias TapInfo = (count: Int, action: () -> Void)
 	
     /// Returns a version of `self` that will invoke `action` after
     /// recognizing a tap gesture.
 	public func onTapGesture(count: Int = 1, perform action: @escaping () -> Void) -> Text {
-		var text = self
+		var text = mainText
 		text.useTap = true
-		let value: TapInfo = (count, action)
-		return text.addAttribute(Self.tapKey, value: value)
+		let value: Text.TapInfo = (count, action)
+		return text.addAttribute(Text.tapKey, value: value)
 	}
 }
-
 extension Text {
 	/// How text is truncated when a line of text is too long to fit into the
 	/// available space.
@@ -361,22 +343,25 @@ extension Text {
 		
 		case middle
 	}
-	public enum TextAlignment : Hashable, CaseIterable {
-
+	public enum Alignment : Hashable, CaseIterable {
+		
 		case leading
-
+		
 		case center
-
+		
 		case trailing
 	}
+}
+
+extension TextProtocol {
     /// Sets the alignment of multiline text in this view.
     ///
     /// - Parameter alignment: A value you use to align lines of text to the
     ///   left, right, or center.
     /// - Returns: A view that aligns the lines of multiline `Text` instances
     ///   it contains.
-	public func multilineTextAlignment(_ alignment: TextAlignment) -> Text {
-		changeParagraphStyle { (para) in
+	public func multilineTextAlignment(_ alignment: Text.Alignment) -> Text {
+		mainText.changeParagraphStyle { (para) in
 			switch alignment {
 			case .leading:
 				para.alignment = .left
@@ -400,8 +385,8 @@ extension Text {
     /// - Parameter mode: The truncation mode.
     /// - Returns: A view that truncates text at different points in a line
     ///   depending on the mode you select.
-	public func truncationMode(_ mode: TruncationMode) -> Text {
-		changeParagraphStyle { (para) in
+	public func truncationMode(_ mode: Text.TruncationMode) -> Text {
+		mainText.changeParagraphStyle { (para) in
 			switch mode {
 			case .head:
 				para.lineBreakMode = .byTruncatingHead
@@ -419,7 +404,7 @@ extension Text {
     /// - Parameter lineSpacing: The amount of space between the bottom of one
     ///   line and the top of the next line.
     public func lineSpacing(_ lineSpacing: CGFloat) -> Text {
-		changeParagraphStyle { (para) in
+		mainText.changeParagraphStyle { (para) in
 			para.lineSpacing = lineSpacing
 		}
 	}
@@ -427,7 +412,7 @@ extension Text {
     ///
     /// - Parameter lineHeight: The amount of height of each line
     public func lineHeight(_ lineHeight: CGFloat) -> Text {
-		changeParagraphStyle { (para) in
+		mainText.changeParagraphStyle { (para) in
 			para.maximumLineHeight = lineHeight
 			para.minimumLineHeight = lineHeight
 		}
@@ -437,7 +422,7 @@ extension Text {
 	///
 	/// - Parameter lineHeight: The range of height of each line
 	public func lineHeight(_ lineHeight: ClosedRange<CGFloat>) -> Text {
-		changeParagraphStyle { (para) in
+		mainText.changeParagraphStyle { (para) in
 			para.maximumLineHeight = lineHeight.upperBound
 			para.minimumLineHeight = lineHeight.lowerBound
 		}
@@ -451,7 +436,7 @@ extension Text {
     /// - Returns: A view that can compress the space between characters when
     ///   necessary to fit text in a line.
 	public func allowsTightening(_ flag: Bool) -> Text {
-		changeParagraphStyle { (para) in
+		mainText.changeParagraphStyle { (para) in
 			para.allowsDefaultTighteningForTruncation = flag
 		}
 	}
@@ -470,7 +455,7 @@ extension Text {
     ///
     /// - Note: a non-nil `number` less than 1 will be treated as 1.
 	public func lineLimit(_ number: Int?) -> Text {
-		var text = self
+		var text = mainText
 		text.lineLimit = number
 		return text
 	}
@@ -488,7 +473,7 @@ extension Text {
     ///   specify the minimum amount of text scaling that this view permits.
     /// - Returns: A view that limits the amount of text downscaling.
 	public func minimumScaleFactor(_ factor: CGFloat) -> Text {
-		var text = self
+		var text = mainText
 		text.minimumScaleFactor = factor
 		return text
 	}
@@ -496,5 +481,38 @@ extension Text {
 extension Text {
 	public var count: Int {
 		_text.length
+	}
+}
+
+
+extension Text: TextProtocol {
+	var mainText: Text {
+		self
+	}
+}
+
+extension Text: ExpressibleByStringLiteral {
+	public init(stringLiteral value: String) {
+		self.init(value)
+	}
+}
+
+extension Text: Equatable {
+	public static func == (lhs: Self, rhs: Self) -> Bool {
+		lhs._text == rhs._text
+	}
+}
+
+extension String: TextProtocol {
+	var mainText: Text {
+		Text(self)
+	}
+}
+
+extension Array: TextProtocol where Element: TextProtocol {
+	var mainText: Text {
+		reduce(Text(""), {
+			$0.mainText + $1.mainText
+		})
 	}
 }
