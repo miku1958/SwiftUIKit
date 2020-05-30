@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol TextProtocol {
+public protocol TextProtocol {
 	var mainText: Text { get }
 }
 
@@ -121,7 +121,7 @@ extension Text {
 		return self
 	}
 }
-extension TextProtocol {
+public extension TextProtocol {
 	
 	/// Sets the color of this text.
 	///
@@ -196,7 +196,7 @@ extension TextProtocol {
 	///   - color: The color of the strikethrough. If `color` is `nil`, the
 	///     strikethrough uses the default foreground color.
 	/// - Returns: Text with a line through its center.
-	func strikethrough(_ active: Bool = true, color: UIColor? = nil) -> Text {
+	public func strikethrough(_ active: Bool = true, color: UIColor? = nil) -> Text {
 		let text = mainText
 		text.addAttribute(.strikethroughColor, value: active ? color : nil)
 		text.addAttribute(.strikethroughStyle, value: NSUnderlineStyle.single.rawValue)
@@ -273,7 +273,7 @@ extension TextProtocol {
 	/// - Parameter shadowBlurRadius: blur radius of the shadow in default user space units
 	/// - Parameter shadowColor: color used for the shadow (default is black with an alpha value of 1/3)
 	/// - Returns: Text that's above or below its shadow.
-	func shadow(_ shadowOffset: CGSize, shadowBlurRadius: CGFloat, shadowColor: UIColor? = nil) -> Text {
+	public func shadow(_ shadowOffset: CGSize, shadowBlurRadius: CGFloat, shadowColor: UIColor? = nil) -> Text {
 		let shadow = NSShadow()
 		shadow.shadowOffset = shadowOffset
 		shadow.shadowBlurRadius = shadowBlurRadius
@@ -313,7 +313,7 @@ extension Text {
 	typealias TapInfo = (count: Int, action: () -> Void)
 }
 
-extension TextProtocol {
+public extension TextProtocol {
     /// Returns a version of `self` that will invoke `action` after
     /// recognizing a longPress gesture.
 	public func onLongPressGesture(minimumDuration: TimeInterval = 0.5, maximumDistance: CGFloat = 10, pressing: ((Bool) -> Void)? = nil, perform action: @escaping () -> Void) -> Text {
@@ -332,7 +332,7 @@ extension TextProtocol {
 		return text.addAttribute(Text.tapKey, value: value)
 	}
 }
-extension Text {
+public extension Text {
 	/// How text is truncated when a line of text is too long to fit into the
 	/// available space.
 	public enum TruncationMode {
@@ -478,7 +478,7 @@ extension TextProtocol {
 		return text
 	}
 }
-extension Text {
+public extension Text {
 	public var count: Int {
 		_text.length
 	}
@@ -486,7 +486,7 @@ extension Text {
 
 
 extension Text: TextProtocol {
-	var mainText: Text {
+	public var mainText: Text {
 		self
 	}
 }
@@ -504,13 +504,13 @@ extension Text: Equatable {
 }
 
 extension String: TextProtocol {
-	var mainText: Text {
+	public var mainText: Text {
 		Text(self)
 	}
 }
 
 extension Array: TextProtocol where Element: TextProtocol {
-	var mainText: Text {
+	public var mainText: Text {
 		reduce(Text(""), {
 			$0.mainText + $1.mainText
 		})

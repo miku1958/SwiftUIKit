@@ -1,7 +1,7 @@
 Pod::Spec.new do |spec|
 
   spec.name         = "SwiftUIKit"
-  spec.version      = "1.1.2"
+  spec.version      = "1.1.3"
   spec.summary      = "A SwfitUI style UIKit"
 
   spec.description  = <<-DESC
