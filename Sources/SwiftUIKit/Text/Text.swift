@@ -113,14 +113,9 @@ extension Text {
 	}
 	func changeParagraphStyle(_ handler: (NSMutableParagraphStyle) -> Void) -> Text {
 		guard _text.length > 0 else { return self }
-		let para = _text.attribute(.paragraphStyle, at: 0, effectiveRange: nil) as? NSParagraphStyle ?? NSMutableParagraphStyle()
-		if let para = para as? NSMutableParagraphStyle {
-			handler(para)
-			return addAttribute(.paragraphStyle, value: para)
-		} else if let para = para.mutableCopy() as? NSMutableParagraphStyle {
-			handler(para)
-			return addAttribute(.paragraphStyle, value: para)
-		}
+		let para = (_text.attribute(.paragraphStyle, at: 0, effectiveRange: nil) as? NSParagraphStyle).mutableCopyIfNeed()
+		handler(para)
+		addAttribute(.paragraphStyle, value: para)
 		return self
 	}
 }
