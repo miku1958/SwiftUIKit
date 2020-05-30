@@ -8,78 +8,122 @@
 
 import UIKit
 
-extension UIView {
-	class LongPressGesture: UILongPressGestureRecognizer {
-		var text: [NSRange] = []
-		var pressing = false
-		var didSentPressing = false
-		func sendAllAction() {
-			let targetActionPairs = value(forKey: "_targets") as? [NSObject] ?? []
-			for var targetActionPair in targetActionPairs {
-				guard let target = targetActionPair.value(forKey: "_target") as? NSObject else { continue }
-				if target.isKind(of: NSClassFromString("UIGestureRecognizerTarget")!) {
-					targetActionPair = target
-				}
+protocol UIGestureActionable: NSObjectProtocol {
+	var action: ((Any) -> Void)? { get set }
+}
 
-				let selector = NSSelectorFromString("_sendActionWithGestureRecognizer:");
-				if targetActionPair.responds(to: selector) {
-					targetActionPair.perform(selector, with: self)
-				}
-			}
-		}
-		override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent) {
-			super.touchesBegan(touches, with: event)
-			pressing = true
-			sendAllAction()
-		}
-		override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent) {
-			pressing = false
-			super.touchesEnded(touches, with: event)
-			if !didSentPressing {
-				sendAllAction()
-			}
-			didSentPressing = false
-		}
-		override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent) {
-			pressing = false
-			didSentPressing = false
-			super.touchesCancelled(touches, with: event)
+extension UIGestureRecognizer {
+	@objc func performAction() {
+		if let self = self as? UIGestureActionable {
+			self.action?(self)
 		}
 	}
-	class TapGesture: UITapGestureRecognizer {
-		var text: [NSRange] = []
-		
-		private override init(target: Any?, action: Selector?) {
-			super.init(target: target, action: action)
-		}
-		typealias ActionType = (_ location: CGPoint, _ text: [NSRange]) -> Void
-		var actions = [ActionType]()
-		convenience init(action: @escaping ActionType) {
-			self.init()
-			actions.append(action)
-		}
-		override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent) {
-			if let location = touches.first?.location(in: view) {
-				actions.forEach {
-					$0(location, text)
-				}
+}
+
+extension UIGestureActionable where Self: UIGestureRecognizer {
+	func add(action: @escaping (Self) -> Void) -> Self {
+		self.action = {
+			if let self = $0 as? Self {
+				action(self)
 			}
-			super.touchesEnded(touches, with: event)
+		}
+		addTarget(self, action: #selector(performAction))
+		return self
+	}
+}
+
+extension UIGestureRecognizer.State: CustomDebugStringConvertible {
+	public var debugDescription: String {
+		switch self {
+		case .possible:
+			return "UIGestureRecognizer.State.possible"
+		case .began:
+			return "UIGestureRecognizer.State.began"
+		case .changed:
+			return "UIGestureRecognizer.State.changed"
+		case .ended:
+			return "UIGestureRecognizer.State.ended"
+		case .cancelled:
+			return "UIGestureRecognizer.State.cancelled"
+		case .failed:
+			return "UIGestureRecognizer.State.failed"
+		}
+	}
+}
+extension UIGestureRecognizer {
+	func sendAllAction() {
+		let targetActionPairs = value(forKey: "_targets") as? [NSObject] ?? []
+		for var targetActionPair in targetActionPairs {
+			guard let target = targetActionPair.value(forKey: "_target") as? NSObject else { continue }
+			if target.isKind(of: NSClassFromString("UIGestureRecognizerTarget")!) {
+				targetActionPair = target
+			}
+			
+			let selector = NSSelectorFromString("_sendActionWithGestureRecognizer:");
+			if targetActionPair.responds(to: selector) {
+				targetActionPair.perform(selector, with: self)
+			}
 		}
 	}
 }
 
 extension UIView {
-	private class TapGestureRecognizer: UITapGestureRecognizer {
-		var action: (UITapGestureRecognizer) -> Void
-		init(action: @escaping (UITapGestureRecognizer) -> Void) {
-			self.action = action
-			super.init(target: nil, action: nil)
-			addTarget(self, action: #selector(performAction))
+	class LongPressGesture: UILongPressGestureRecognizer, UIGestureActionable {
+		/// 按住
+		var pressing = false
+		/// pressing的状态是否回调了
+		var didFinishPress = false
+		
+		var action: ((Any) -> Void)?
+		
+		func handle(pressing pressingAction: ((Bool) -> Void)? = nil, perform action: @escaping () -> Void) {
+			switch state {
+			case .possible:
+				if pressing {
+					pressingAction?(true)
+				}
+			case .began:
+				pressingAction?(false)
+				didFinishPress = true
+				action()
+			case .failed, .failed, .cancelled, .ended:
+				if !didFinishPress {
+					pressingAction?(false)
+				}
+			default: break
+			}
 		}
-		@objc private func performAction() {
-			action(self)
+	}
+	/// Returns a version of `self` that will invoke `action` after
+	/// recognizing a longPress gesture.
+	@discardableResult
+	public func onLongPressGesture(minimumDuration: Double = 0.5, maximumDistance: CGFloat = 10, pressing: ((Bool) -> Void)? = nil, perform action: @escaping () -> Void) -> Self {
+		let longPress = LongPressGesture().add { (longPress) in
+			longPress.handle(pressing: pressing, perform: action)
 		}
+		longPress.minimumPressDuration = minimumDuration
+		longPress.allowableMovement = maximumDistance
+		addGestureRecognizer(longPress)
+		return self
+	}
+}
+extension UIView.LongPressGesture {
+	override func reset() {
+		super.reset()
+		pressing = false
+		sendAllAction()
+		didFinishPress = false
+	}
+	override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent) {
+		super.touchesBegan(touches, with: event)
+		pressing = true
+		sendAllAction()
+	}
+}
+
+extension UIView {
+	class TapGestureRecognizer: UITapGestureRecognizer, UIGestureActionable {
+		var action: ((Any) -> Void)?
 	}
 	
     /// Returns a version of `self` that will invoke `action` after
@@ -94,7 +138,7 @@ extension UIView {
     /// recognizing a tap gesture.
 	@discardableResult
 	public func onTapGesture(count: Int = 1, perform action: @escaping (UITapGestureRecognizer) -> Void) -> Self {
-		let tap = TapGestureRecognizer(action: action)
+		let tap = TapGestureRecognizer().add(action: action)
 		tap.numberOfTapsRequired = count
 		addGestureRecognizer(tap)
 		isUserInteractionEnabled = true
@@ -123,26 +167,6 @@ extension UIView {
 		func locationOfTouchInTextContainer(location: CGPoint, textBoundingBox: CGRect = .zero) -> CGPoint {
 			location
 		}
-		@objc fileprivate func handleLongPressText(_ longPress: LongPressGesture) {
-			if let info: Text.LongPressInfo = gestureWorkingInfo(location: longPress.location(in: view), texts: longPress.text, key: Text.longPressKey) {
-				switch longPress.state {
-				case .possible:
-					if longPress.pressing {
-						info.pressing?(true)
-					}
-				case .began:
-					info.pressing?(false)
-					longPress.didSentPressing = true
-					info.action()
-				case .failed:
-					if !longPress.didSentPressing {
-						info.pressing?(false)
-					}
-				default:
-					break
-				}
-			}
-		}
 		public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
 			return true
 		}
@@ -150,6 +174,12 @@ extension UIView {
 }
 
 extension UIView._Delegate {
+	class TapGesture: UIView.TapGestureRecognizer {
+		var text: [NSRange] = []
+	}
+	class LongPressGesture: UIView.LongPressGesture {
+		var text: [NSRange] = []
+	}
 	func gestureWorkingInfo<T>(location: CGPoint, texts: [NSRange], key: NSAttributedString.Key) -> T? {
 		guard let layoutManager = layoutManager, let textContainer = textContainer else { return nil }
 		let location = locationOfTouchInTextContainer(location: location, textBoundingBox: layoutManager.usedRect(for: textContainer))
@@ -166,8 +196,6 @@ extension UIView._Delegate {
 		}
 		return nil
 	}
-	typealias TapGesture = UIView.TapGesture
-	typealias LongPressGesture = UIView.LongPressGesture
 	func config(text: Text?, tapGestrues: inout [TapGesture], longPressGestrues: inout [LongPressGesture]) {
 		guard let text = text, let view = view else { return }
 		if text.useTap {
@@ -182,9 +210,10 @@ extension UIView._Delegate {
 					return
 				}
 
-				let tap = TapGesture { [weak self] (location, texts) in
+				let tap = TapGesture().add { [weak self] (tap) in
 					guard let self = self else { return }
-					if let info: Text.TapInfo = self.gestureWorkingInfo(location: location, texts: texts, key: Text.tapKey) {
+					let location = tap.location(in: tap.view)
+					if let info: Text.TapInfo = self.gestureWorkingInfo(location: location, texts: tap.text, key: Text.tapKey) {
 						info.action()
 					}
 				}
@@ -212,7 +241,11 @@ extension UIView._Delegate {
 					return
 				}
 
-				let press = LongPressGesture(target: self, action: #selector(handleLongPressText(_:)))
+				let press = LongPressGesture().add { [weak self] (longPress) in
+					if let info: Text.LongPressInfo = self?.gestureWorkingInfo(location: longPress.location(in: view), texts: longPress.text, key: Text.longPressKey) {
+						longPress.handle(pressing: info.pressing, perform: info.action)
+					}
+				}
 
 				press.minimumPressDuration = info.minimumDuration
 				press.allowableMovement = info.maximumDistance

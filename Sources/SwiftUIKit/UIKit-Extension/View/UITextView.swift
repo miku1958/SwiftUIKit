@@ -14,8 +14,8 @@ extension UITextView {
 		
 		fileprivate lazy var delegate = Delegate(view: view)
 		
-		fileprivate var tapGestrues: [TapGesture] = []
-		fileprivate var longPressGestrues: [LongPressGesture] = []
+		fileprivate var tapGestrues: [Delegate.TapGesture] = []
+		fileprivate var longPressGestrues: [Delegate.LongPressGesture] = []
 
 		public var text: Text? {
 			didSet {
