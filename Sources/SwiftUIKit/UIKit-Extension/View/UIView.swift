@@ -86,7 +86,7 @@ extension UIView {
 				pressingAction?(false)
 				didFinishPress = true
 				action()
-			case .failed, .failed, .cancelled, .ended:
+			case .failed, .cancelled, .ended:
 				if !didFinishPress {
 					pressingAction?(false)
 				}

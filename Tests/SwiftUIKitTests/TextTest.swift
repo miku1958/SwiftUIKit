@@ -245,7 +245,6 @@ class TextTest: XCTestCase {
 		XCTAssert(text.text.string == str)
 	}
 	
-	
 	func test_TextProtocol() {
 		let str = "abc"
 		let text = Text(str)
@@ -258,5 +257,9 @@ class TextTest: XCTestCase {
 		XCTAssert(text1 == text2)
 		XCTAssert(text2 == text3)
 		XCTAssert(text3 == text4)
+	}
+	
+	func test_CustomStringConvertible() {
+		XCTAssert(Text(1) == Text("1"))
 	}
 }

@@ -121,7 +121,7 @@ extension Text {
 		return self
 	}
 }
-public extension TextProtocol {
+extension TextProtocol {
 	
 	/// Sets the color of this text.
 	///
@@ -313,7 +313,7 @@ extension Text {
 	typealias TapInfo = (count: Int, action: () -> Void)
 }
 
-public extension TextProtocol {
+extension TextProtocol {
     /// Returns a version of `self` that will invoke `action` after
     /// recognizing a longPress gesture.
 	public func onLongPressGesture(minimumDuration: TimeInterval = 0.5, maximumDistance: CGFloat = 10, pressing: ((Bool) -> Void)? = nil, perform action: @escaping () -> Void) -> Text {
@@ -332,7 +332,7 @@ public extension TextProtocol {
 		return text.addAttribute(Text.tapKey, value: value)
 	}
 }
-public extension Text {
+extension Text {
 	/// How text is truncated when a line of text is too long to fit into the
 	/// available space.
 	public enum TruncationMode {
@@ -478,7 +478,7 @@ extension TextProtocol {
 		return text
 	}
 }
-public extension Text {
+extension Text {
 	public var count: Int {
 		_text.length
 	}
@@ -494,6 +494,9 @@ extension Text: TextProtocol {
 extension Text: ExpressibleByStringLiteral {
 	public init(stringLiteral value: String) {
 		self.init(value)
+	}
+	public init(_ convertible: CustomStringConvertible) {
+		self.init("\(convertible)")
 	}
 }
 
