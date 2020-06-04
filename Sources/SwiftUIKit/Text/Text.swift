@@ -120,6 +120,20 @@ extension Text {
 		addAttribute(.paragraphStyle, value: para)
 		return self
 	}
+	
+	func fixImageOffset() -> Text {
+		_text.enumerateAttributes(in: _text.fullRange, options: []) { (attributes, range, _) in
+			guard
+				attributes[.attachmentOffset] == nil,
+				let attachment = attributes[.attachment] as? NSTextAttachment,
+				let font = attributes[.font] as? UIFont
+			else { return }
+			
+			attachment.bounds.origin.y = CGFloat(Int((font.capHeight - attachment.bounds.height)/2)) - 2
+			_text.addAttribute(.attachment, value: attachment, range: range)
+		}
+		return self
+	}
 }
 extension TextProtocol {
 	
@@ -140,7 +154,9 @@ extension TextProtocol {
 	/// - Parameter font: The font to use when displaying this text.
 	/// - Returns: Text that uses the font you specify.
 	public func font(_ font: Font?) -> Text {
-		mainText.addAttribute(.font, value: font?.uiFont)
+		mainText
+			.addAttribute(.font, value: font?.uiFont)
+			.fixImageOffset()
 	}
 	
 	/// Sets the font to use when displaying this text.
@@ -148,7 +164,9 @@ extension TextProtocol {
 	/// - Parameter font: The font to use when displaying this text.
 	/// - Returns: Text that uses the font you specify.
 	public func font(_ font: UIFont?) -> Text {
-		mainText.addAttribute(.font, value: font)
+		mainText
+			.addAttribute(.font, value: font)
+			.fixImageOffset()
 	}
 	
 	func handleFont(_ handler: (Font) -> Font) -> Text {

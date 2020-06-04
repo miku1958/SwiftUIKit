@@ -10,7 +10,7 @@ import UIKit
 class Interceptor {
 	static let `default` = Interceptor()
 	
-	lazy var cachingImage: [String: (image: UIImage, width: CGFloat?, height: CGFloat?, offset: CGFloat)] = [:]
+	lazy var cachingImage: [String: (image: UIImage, width: CGFloat?, height: CGFloat?, offset: CGFloat?)] = [:]
 	lazy var cachingAttributedString: [String: NSAttributedString] = [:]
 	
 	enum Placeholder {
@@ -33,7 +33,7 @@ class Interceptor {
 }
 
 extension String.StringInterpolation {
-	public mutating func appendInterpolation(_ image: UIImage?, width: CGFloat? = nil, height: CGFloat? = nil, offset: CGFloat = -2) {
+	public mutating func appendInterpolation(_ image: UIImage?, width: CGFloat? = nil, height: CGFloat? = nil, offset: CGFloat? = nil) {
 		guard let image = image else { return }
 		let placeholder = Interceptor.Placeholder.image.new(image)
 		appendLiteral(placeholder)
@@ -93,11 +93,17 @@ extension String {
 				case let (nil, .some(height)):
 					size = CGSize(width: height / imgHeight * imgWidth, height: height)
 				}
+				let range = NSRange(location: 0, length: atr.length)
 				
-				let bounds = CGRect(origin: CGPoint(x: 0, y: image.offset), size: size)
+				let bounds = CGRect(origin: CGPoint(x: 0, y: image.offset ?? -2), size: size)
 				
 				attach.bounds = bounds
-				atr.setAttributes([.attachment: attach], range: NSRange(location: 0, length: atr.length))
+				atr.setAttributes([.attachment: attach], range: range)
+				if let offset = image.offset {
+					atr.addAttributes([
+						.attachmentOffset: offset
+					], range: range)
+				}
 				attStr.append(atr)
 				/*handle image end*/
 			}
@@ -178,6 +184,6 @@ extension String.StringInterpolation {
 		guard let image = image else { return }
 		let placeholder = Interceptor.Placeholder.image.new(image)
 		appendLiteral(placeholder)
-		Interceptor.default.cachingImage[placeholder] = (image, nil, nil, -2)
+		Interceptor.default.cachingImage[placeholder] = (image, nil, nil, nil)
 	}
 }
