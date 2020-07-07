@@ -15,7 +15,7 @@ extension NSParagraphStyle {
 		} else if let _para = self.mutableCopy() as? NSMutableParagraphStyle {
 			return _para
 		} else {
-			return NSMutableParagraphStyle()
+			return NSMutableParagraphStyle.default.mutableCopyIfNeed()
 		}
 	}
 }
@@ -23,7 +23,7 @@ extension Optional where Wrapped == NSParagraphStyle {
 	func mutableCopyIfNeed() -> NSMutableParagraphStyle {
 		switch self {
 		case .none:
-			return NSMutableParagraphStyle()
+			return NSMutableParagraphStyle.default.mutableCopyIfNeed()
 		case .some(let para):
 			return para.mutableCopyIfNeed()
 		}
