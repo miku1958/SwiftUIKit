@@ -15,19 +15,18 @@ A SwfitUI style UIKit
 ```swift
 let label = UILabel()
 
-label.swift.text =
-	(Text("text1")
-		.background(.black)
-		+
-		Text("text2")
-		).foregroundColor(Color(.red))
-		.onTapGesture { print("tap") }
-	+
-	Text("text3\(Text: #imageLiteral(resourceName: "icon_sale_member"), width: 17)")
-		.foregroundColor(.yellow)
-		.tracking(10)
-	+
-	Text("text4")
+label.swift.text = Text("text1")
+	.background(.black)
+label.swift.text += Text("text2")
+	.foregroundColor(Color(.red))
+	
+label.swift.text?.onTapGesture { print("tap") }
+
+label.swift.text +=  Text("text3\(Text: #imageLiteral(resourceName: "icon_sale_member"), width: 17)")
+	.foregroundColor(.yellow)
+	.tracking(10)
+
+label.swift.text += Text("text4")
 		.onLongPressGesture { print("longPress") }
 ```
 
